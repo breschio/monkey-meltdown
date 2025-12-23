@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import { CharacterGenerator } from './components/CharacterGenerator';
 import { N64Game } from './components/N64Game';
 import { StartScreen } from './components/StartScreen';
+import { AudioPlayer } from './components/AudioPlayer';
+import { audioService } from './services/audioService';
 
 type AppMode = 'START' | 'CREATE' | 'GAME';
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<AppMode>('START');
   const [generatedSprite, setGeneratedSprite] = useState<string | null>(null);
+  const [audioEnabled, setAudioEnabled] = useState(() => audioService.isMenuMusicPlaying());
+
+  const handleAudioEnabled = () => {
+    setAudioEnabled(true);
+  };
 
   return (
     <div className="min-h-screen bg-retro-black text-white font-sans selection:bg-n64-yellow selection:text-black flex flex-col">
@@ -20,7 +27,7 @@ const App: React.FC = () => {
             <N64Game isDemo={true} />
           </div>
           {/* Start screen overlay */}
-          <StartScreen onStart={() => setMode('CREATE')} />
+          <StartScreen onStart={() => setMode('CREATE')} onAudioEnabled={handleAudioEnabled} />
         </div>
       )}
 
@@ -63,6 +70,9 @@ const App: React.FC = () => {
           </div>
         </main>
       )}
+
+      {/* Audio Player - shows after audio is enabled */}
+      {audioEnabled && <AudioPlayer />}
     </div>
   );
 };

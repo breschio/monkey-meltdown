@@ -142,6 +142,28 @@ export class AudioService {
     }
   }
 
+  pauseMenuMusic() {
+    if (this.menuAudio) {
+      this.menuAudio.pause();
+    }
+  }
+
+  resumeMenuMusic() {
+    if (this.menuAudio) {
+      this.menuAudio.play().catch(() => {});
+    }
+  }
+
+  setMenuMusicVolume(volume: number) {
+    if (this.menuAudio) {
+      this.menuAudio.volume = Math.max(0, Math.min(1, volume));
+    }
+  }
+
+  getMenuMusicVolume(): number {
+    return this.menuAudio?.volume ?? 0.4;
+  }
+
   fadeOutMenuMusic(duration: number = 1000) {
     if (!this.menuAudio) return;
     

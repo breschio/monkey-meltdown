@@ -3,9 +3,10 @@ import { audioService } from '../services/audioService';
 
 interface StartScreenProps {
   onStart: () => void;
+  onAudioEnabled?: () => void;
 }
 
-export const StartScreen: React.FC<StartScreenProps> = ({ onStart }) => {
+export const StartScreen: React.FC<StartScreenProps> = ({ onStart, onAudioEnabled }) => {
   // Check if audio is already playing (user returned from gameplay)
   const [audioEnabled, setAudioEnabled] = useState(() => audioService.isMenuMusicPlaying());
 
@@ -15,6 +16,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStart }) => {
       audioService.resume();
       audioService.startMenuMusic();
       setAudioEnabled(true);
+      onAudioEnabled?.();
     } else {
       // Second click: start game
       onStart();
