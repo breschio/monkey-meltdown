@@ -3,6 +3,8 @@ export class AudioService {
   private masterGain: GainNode | null = null;
   private bgmOscillators: OscillatorNode[] = [];
   private isMuted: boolean = false;
+  private menuAudio: HTMLAudioElement | null = null;
+  private gameAudio: HTMLAudioElement | null = null;
 
   constructor() {
     try {
@@ -110,6 +112,56 @@ export class AudioService {
       clearInterval((this as any).musicInterval);
     }
     this.bgmOscillators = [];
+  }
+
+  // Check if menu music is currently playing
+  isMenuMusicPlaying(): boolean {
+    return this.menuAudio !== null && !this.menuAudio.paused;
+  }
+
+  // Menu music (MP3 file)
+  startMenuMusic() {
+    if (this.menuAudio) {
+      this.menuAudio.currentTime = 0;
+      this.menuAudio.play().catch(() => {});
+      return;
+    }
+
+    this.menuAudio = new Audio('/audio/menu-music.mp3');
+    this.menuAudio.loop = true;
+    this.menuAudio.volume = 0.4;
+    this.menuAudio.play().catch(() => {
+      // Autoplay blocked - will play on user interaction
+    });
+  }
+
+  stopMenuMusic() {
+    if (this.menuAudio) {
+      this.menuAudio.pause();
+      this.menuAudio.currentTime = 0;
+    }
+  }
+
+  fadeOutMenuMusic(duration: number = 1000) {
+    if (!this.menuAudio) return;
+    
+    const startVolume = this.menuAudio.volume;
+    const steps = 20;
+    const stepDuration = duration / steps;
+    const volumeStep = startVolume / steps;
+    
+    let currentStep = 0;
+    const fadeInterval = setInterval(() => {
+      currentStep++;
+      if (this.menuAudio) {
+        this.menuAudio.volume = Math.max(0, startVolume - (volumeStep * currentStep));
+      }
+      if (currentStep >= steps) {
+        clearInterval(fadeInterval);
+        this.stopMenuMusic();
+        if (this.menuAudio) this.menuAudio.volume = 0.4; // Reset for next time
+      }
+    }, stepDuration);
   }
 }
 

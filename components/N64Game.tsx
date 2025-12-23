@@ -472,10 +472,9 @@ export const N64Game: React.FC<N64GameProps> = ({ generatedSpriteUrl, isDemo = f
         spawnObject(-20 - (i * 15));
     }
 
-    // Only play sounds in non-demo mode
+    // Only play sounds in non-demo mode (music handled at App level)
     if (!isDemoRef.current) {
       audioService.resume();
-      audioService.startMusic();
       audioService.playJump();
     }
   }, []);
@@ -753,7 +752,6 @@ export const N64Game: React.FC<N64GameProps> = ({ generatedSpriteUrl, isDemo = f
             mountRef.current.removeChild(rendererRef.current.domElement);
         }
         if (reqRef.current) cancelAnimationFrame(reqRef.current);
-        audioService.stopMusic();
     };
   }, []);
 
@@ -773,7 +771,6 @@ export const N64Game: React.FC<N64GameProps> = ({ generatedSpriteUrl, isDemo = f
               if (prev <= 1) {
                   setGameState('LEVEL_COMPLETE');
                   gameActiveRef.current = false;
-                  audioService.stopMusic();
                   audioService.playJump();
                   return 0;
               }

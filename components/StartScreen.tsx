@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { audioService } from '../services/audioService';
 
 interface StartScreenProps {
   onStart: () => void;
 }
 
 export const StartScreen: React.FC<StartScreenProps> = ({ onStart }) => {
+  // Check if audio is already playing (user returned from gameplay)
+  const [audioEnabled, setAudioEnabled] = useState(() => audioService.isMenuMusicPlaying());
+
+  const handleButtonClick = () => {
+    if (!audioEnabled) {
+      // First click: enable audio
+      audioService.resume();
+      audioService.startMenuMusic();
+      setAudioEnabled(true);
+    } else {
+      // Second click: start game
+      onStart();
+    }
+  };
+
   return (
     <div className="absolute inset-0 z-30 flex flex-col items-center justify-center">
       {/* Dark overlay over the background gameplay */}
@@ -34,16 +50,22 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStart }) => {
           Ski the slopes. Collect bananas. Avoid pizza.
         </p>
 
-        {/* Start Button */}
+        {/* Main Button - Enable Audio first, then Start Game */}
         <button
-          onClick={onStart}
-          className="group relative px-12 py-5 bg-n64-yellow text-retro-black font-black text-2xl uppercase tracking-widest rounded-lg 
-                     shadow-2xl shadow-yellow-500/30 hover:shadow-yellow-500/50
+          onClick={handleButtonClick}
+          className={`group relative px-12 py-5 font-black text-2xl uppercase tracking-widest rounded-lg 
                      transform hover:scale-105 active:scale-95 transition-all duration-200
-                     border-b-4 border-yellow-600 hover:border-yellow-500"
+                     ${audioEnabled 
+                       ? 'bg-n64-yellow text-retro-black shadow-2xl shadow-yellow-500/30 hover:shadow-yellow-500/50 border-b-4 border-yellow-600 hover:border-yellow-500' 
+                       : 'bg-white/20 text-white shadow-2xl shadow-white/10 hover:shadow-white/20 border-b-4 border-white/30 hover:border-white/50 backdrop-blur-sm'
+                     }`}
         >
-          <span className="relative z-10">Start Game</span>
-          <div className="absolute inset-0 bg-gradient-to-t from-yellow-500/20 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+          <span className="relative z-10 flex items-center gap-3">
+            {!audioEnabled && <span className="text-2xl">🔊</span>}
+            {audioEnabled ? 'Start Game' : 'Enable Audio'}
+          </span>
+          <div className={`absolute inset-0 bg-gradient-to-t rounded-lg opacity-0 group-hover:opacity-100 transition-opacity
+                          ${audioEnabled ? 'from-yellow-500/20 to-transparent' : 'from-white/10 to-transparent'}`} />
         </button>
 
         {/* Controls hint */}
