@@ -1,0 +1,5 @@
+{
+  "name": "Monkey Meltdown",
+  "description": "A retro-styled character generator that creates N64-style sprites using Gemini's image generation capabilities.",
+  "requestFramePermissions": []
+}
