@@ -826,13 +826,13 @@ export const N64Game: React.FC<N64GameProps> = ({ generatedSpriteUrl, isDemo = f
       {gameState === 'PLAYING' && !isDemo && (
         <div className="absolute inset-0 pointer-events-none p-4 flex flex-col justify-between z-10">
             <div className="flex justify-between items-start">
-                <div className="bg-black/50 p-2 rounded border-b-4 border-n64-yellow backdrop-blur-sm">
-                    <div className="text-xs text-n64-yellow font-mono">SCORE</div>
-                    <div className="text-2xl text-white font-black font-mono tracking-widest">{score.toString().padStart(6, '0')}</div>
+                <div className="bg-white/70 p-2 rounded-lg border-b-4 border-mm-purple backdrop-blur-sm shadow-lg">
+                    <div className="text-xs text-mm-purple font-mono">SCORE</div>
+                    <div className="text-2xl text-mm-deep font-black font-mono tracking-widest">{score.toString().padStart(6, '0')}</div>
                 </div>
-                <div className="bg-black/50 p-2 rounded border-b-4 border-n64-red text-center min-w-[80px] backdrop-blur-sm">
-                    <div className="text-xs text-n64-red font-mono">TIME</div>
-                    <div className={`text-3xl font-black ${timeRemaining < 10 ? 'text-red-500 animate-pulse' : 'text-white'}`}>{timeRemaining}</div>
+                <div className="bg-white/70 p-2 rounded-lg border-b-4 border-mm-pink text-center min-w-[80px] backdrop-blur-sm shadow-lg">
+                    <div className="text-xs text-mm-pink font-mono">TIME</div>
+                    <div className={`text-3xl font-black ${timeRemaining < 10 ? 'text-mm-pink animate-pulse' : 'text-mm-deep'}`}>{timeRemaining}</div>
                 </div>
             </div>
         </div>
@@ -840,16 +840,16 @@ export const N64Game: React.FC<N64GameProps> = ({ generatedSpriteUrl, isDemo = f
 
       {/* Level Complete Overlay - hidden in demo mode */}
       {gameState === 'LEVEL_COMPLETE' && !isDemo && (
-         <div className="absolute inset-0 bg-n64-blue/90 backdrop-blur flex flex-col items-center justify-center text-white p-8 text-center z-20 animate-fade-in">
-            <h2 className="text-5xl font-black mb-2 text-n64-yellow drop-shadow-xl italic transform -skew-x-6">COURSE CLEAR!</h2>
-            <div className="w-full max-w-xs bg-black/30 rounded p-4 mb-8 backdrop-blur-sm border border-white/20">
+         <div className="absolute inset-0 bg-gradient-to-br from-mm-purple/95 to-mm-pink/95 backdrop-blur flex flex-col items-center justify-center text-white p-8 text-center z-20 animate-fade-in">
+            <h2 className="font-game text-5xl mb-2 text-mm-yellow drop-shadow-xl">COURSE CLEAR!</h2>
+            <div className="w-full max-w-xs bg-white/20 rounded-xl p-4 mb-8 backdrop-blur-sm border border-white/30">
                 <div className="flex justify-between text-sm font-mono mb-2">
-                    <span className="text-gray-300">SCORE</span>
+                    <span className="text-white/80">SCORE</span>
                     <span className="text-white font-bold">{score}</span>
                 </div>
                 <div className="flex justify-between text-sm font-mono">
-                    <span className="text-gray-300">LEVEL</span>
-                    <span className="text-n64-green font-bold">{level + 1}</span>
+                    <span className="text-white/80">LEVEL</span>
+                    <span className="text-mm-mint font-bold">{level + 1}</span>
                 </div>
             </div>
             <button 
@@ -858,7 +858,7 @@ export const N64Game: React.FC<N64GameProps> = ({ generatedSpriteUrl, isDemo = f
                     setLevel(nextLevel);
                     startGame(nextLevel);
                 }}
-                className="px-8 py-4 bg-white text-n64-blue font-black rounded-full hover:bg-gray-100 transition-transform hover:scale-105 shadow-xl text-lg uppercase tracking-wide"
+                className="px-8 py-4 bg-white text-mm-deep font-black rounded-full hover:bg-mm-light transition-transform hover:scale-105 shadow-xl text-lg uppercase tracking-wide"
             >
                 Start Level {level + 1}
             </button>

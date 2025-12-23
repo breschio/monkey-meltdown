@@ -17,7 +17,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-retro-black text-white font-sans selection:bg-n64-yellow selection:text-black flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-mm-light via-mm-lavender/30 to-mm-purple/20 text-retro-black font-sans selection:bg-mm-pink selection:text-white flex flex-col">
       
       {/* Start Screen - overlays the demo game */}
       {mode === 'START' && (
@@ -35,10 +35,10 @@ const App: React.FC = () => {
       {mode === 'CREATE' && (
         <main className="flex-grow w-full flex flex-col items-center justify-center transition-all duration-300 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center mb-8 animate-fade-in">
-            <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6">
-              <span className="text-n64-yellow">Create</span> Your Character
+            <h2 className="text-4xl md:text-6xl font-extrabold text-retro-black mb-6">
+              <span className="text-mm-pink">Create</span> Your Character
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-xl">
+            <p className="text-mm-deep/70 max-w-2xl mx-auto text-xl">
               Describe your character and watch the AI bring it to life
             </p>
           </div>
@@ -56,11 +56,11 @@ const App: React.FC = () => {
             <div className="text-center mb-2 flex-shrink-0">
               <button 
                 onClick={() => setMode('START')}
-                className="text-3xl font-extrabold text-white mb-1 tracking-tight hover:opacity-80 transition-opacity cursor-pointer"
+                className="font-game text-3xl mb-1 hover:opacity-80 transition-opacity cursor-pointer"
               >
-                <span className="text-n64-yellow">MONKEY</span> <span className="text-n64-red italic transform -skew-x-6 inline-block">MELTDOWN</span>
+                <span className="text-mm-pink">MONKEY</span> <span className="text-mm-purple">MELTDOWN</span>
               </button>
-              <p className="text-gray-400 text-xs font-mono">
+              <p className="text-mm-deep/60 text-xs font-mono">
                 Collect Bananas • Avoid Pizza • Beat the Clock
               </p>
             </div>

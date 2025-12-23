@@ -10,16 +10,26 @@
         theme: {
           extend: {
             colors: {
-              'retro-gray': '#2d2d2d',
-              'retro-black': '#1a1a1a',
-              'n64-yellow': '#facc15',
-              'n64-blue': '#3b82f6',
-              'n64-red': '#ef4444',
-              'n64-green': '#22c55e',
+              'retro-gray': '#f0e6f6',
+              'retro-black': '#1a1a2e',
+              'mm-pink': '#ff6b9d',
+              'mm-purple': '#c084fc',
+              'mm-lavender': '#e9d5ff',
+              'mm-magenta': '#e879f9',
+              'mm-deep': '#7c3aed',
+              'mm-light': '#fdf4ff',
+              'mm-yellow': '#fde047',
+              'mm-mint': '#6ee7b7',
+              // Keep old names for compatibility, map to new colors
+              'n64-yellow': '#fde047',
+              'n64-blue': '#c084fc',
+              'n64-red': '#ff6b9d',
+              'n64-green': '#6ee7b7',
             },
             fontFamily: {
               sans: ['Inter', 'system-ui', 'sans-serif'],
               mono: ['Fira Code', 'monospace'],
+              'game': ['"Game Bubble"', 'cursive'],
             },
             animation: {
               'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -29,23 +39,31 @@
       }
     </script>
     <style>
-      body {
-        background-color: #1a1a1a;
-        color: #e5e5e5;
+      @font-face {
+        font-family: 'Game Bubble';
+        src: url('/fonts/Game Bubble.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
       }
-      /* Custom scrollbar for a tech feel */
+      body {
+        background: linear-gradient(135deg, #fdf4ff 0%, #f0e6f6 50%, #e9d5ff 100%);
+        color: #1a1a2e;
+        min-height: 100vh;
+      }
+      /* Custom scrollbar with pink/purple theme */
       ::-webkit-scrollbar {
         width: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #1a1a1a;
+        background: #fdf4ff;
       }
       ::-webkit-scrollbar-thumb {
-        background: #4b5563;
+        background: #c084fc;
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #6b7280;
+        background: #a855f7;
       }
     </style>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐵</text></svg>">

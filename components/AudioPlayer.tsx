@@ -34,8 +34,8 @@ export const AudioPlayer: React.FC = () => {
 
   return (
     <div 
-      className={`fixed bottom-4 left-4 z-50 flex items-center gap-2 bg-black/70 backdrop-blur-sm 
-                  rounded-full border border-white/10 transition-all duration-300 
+      className={`fixed bottom-4 left-4 z-50 flex items-center gap-2 bg-white/80 backdrop-blur-sm 
+                  rounded-full border border-mm-purple/20 shadow-lg shadow-purple-500/10 transition-all duration-300 
                   ${isExpanded ? 'px-4 py-2' : 'px-2 py-2'}`}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
@@ -43,8 +43,8 @@ export const AudioPlayer: React.FC = () => {
       {/* Play/Pause Button */}
       <button
         onClick={togglePlay}
-        className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 
-                   transition-colors text-white text-sm"
+        className="w-8 h-8 flex items-center justify-center rounded-full bg-mm-purple/20 hover:bg-mm-purple/30 
+                   transition-colors text-mm-deep text-sm"
         title={isPlaying ? 'Pause' : 'Play'}
       >
         {isPlaying ? '⏸' : '▶'}
@@ -53,7 +53,7 @@ export const AudioPlayer: React.FC = () => {
       {/* Volume Controls - Show on hover */}
       <div className={`flex items-center gap-2 overflow-hidden transition-all duration-300 
                        ${isExpanded ? 'w-24 opacity-100' : 'w-0 opacity-0'}`}>
-        <span className="text-white/60 text-xs">🔊</span>
+        <span className="text-mm-deep/60 text-xs">🔊</span>
         <input
           type="range"
           min="0"
@@ -61,12 +61,12 @@ export const AudioPlayer: React.FC = () => {
           step="0.05"
           value={volume}
           onChange={handleVolumeChange}
-          className="w-16 h-1 bg-white/20 rounded-full appearance-none cursor-pointer
+          className="w-16 h-1 bg-mm-purple/20 rounded-full appearance-none cursor-pointer
                      [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 
-                     [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-n64-yellow 
+                     [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-mm-pink 
                      [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer
                      [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 
-                     [&::-moz-range-thumb]:bg-n64-yellow [&::-moz-range-thumb]:rounded-full 
+                     [&::-moz-range-thumb]:bg-mm-pink [&::-moz-range-thumb]:rounded-full 
                      [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
         />
       </div>
@@ -74,9 +74,9 @@ export const AudioPlayer: React.FC = () => {
       {/* Music indicator */}
       {isPlaying && (
         <div className="flex gap-0.5 items-end h-4">
-          <div className="w-0.5 bg-n64-yellow rounded-full animate-pulse" style={{ height: '60%', animationDelay: '0ms' }} />
-          <div className="w-0.5 bg-n64-yellow rounded-full animate-pulse" style={{ height: '100%', animationDelay: '150ms' }} />
-          <div className="w-0.5 bg-n64-yellow rounded-full animate-pulse" style={{ height: '40%', animationDelay: '300ms' }} />
+          <div className="w-0.5 bg-mm-pink rounded-full animate-pulse" style={{ height: '60%', animationDelay: '0ms' }} />
+          <div className="w-0.5 bg-mm-purple rounded-full animate-pulse" style={{ height: '100%', animationDelay: '150ms' }} />
+          <div className="w-0.5 bg-mm-magenta rounded-full animate-pulse" style={{ height: '40%', animationDelay: '300ms' }} />
         </div>
       )}
     </div>

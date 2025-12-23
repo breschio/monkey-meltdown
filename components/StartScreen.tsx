@@ -25,29 +25,29 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStart, onAudioEnable
 
   return (
     <div className="absolute inset-0 z-30 flex flex-col items-center justify-center">
-      {/* Dark overlay over the background gameplay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 pointer-events-none" />
+      {/* Light gradient overlay over the background gameplay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-mm-light/90 via-mm-lavender/80 to-mm-purple/70 pointer-events-none" />
       
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-4">
         {/* Decorative top element */}
         <div className="flex gap-2 mb-6 animate-bounce">
-          <span className="w-4 h-4 bg-n64-yellow rounded-full shadow-lg shadow-yellow-500/50"></span>
-          <span className="w-4 h-4 bg-n64-red rounded-full shadow-lg shadow-red-500/50"></span>
-          <span className="w-4 h-4 bg-n64-blue rounded-full shadow-lg shadow-blue-500/50"></span>
-          <span className="w-4 h-4 bg-n64-green rounded-full shadow-lg shadow-green-500/50"></span>
+          <span className="w-4 h-4 bg-mm-pink rounded-full shadow-lg shadow-pink-500/50"></span>
+          <span className="w-4 h-4 bg-mm-purple rounded-full shadow-lg shadow-purple-500/50"></span>
+          <span className="w-4 h-4 bg-mm-magenta rounded-full shadow-lg shadow-fuchsia-500/50"></span>
+          <span className="w-4 h-4 bg-mm-mint rounded-full shadow-lg shadow-emerald-500/50"></span>
         </div>
 
         {/* Main Title */}
-        <h1 className="text-6xl md:text-8xl font-black text-white mb-2 tracking-tight drop-shadow-2xl">
-          <span className="text-n64-yellow">MONKEY</span>
+        <h1 className="font-game text-6xl md:text-8xl text-mm-pink mb-2 drop-shadow-2xl" style={{ textShadow: '3px 3px 0 #7c3aed, -1px -1px 0 #7c3aed' }}>
+          MONKEY
         </h1>
-        <h1 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight drop-shadow-2xl italic transform -skew-x-3">
-          <span className="text-n64-red">MELTDOWN</span>
+        <h1 className="font-game text-5xl md:text-7xl text-mm-purple mb-8 drop-shadow-2xl" style={{ textShadow: '3px 3px 0 #ec4899, -1px -1px 0 #ec4899' }}>
+          MELTDOWN
         </h1>
 
         {/* Subtitle */}
-        <p className="text-gray-300 text-lg md:text-xl mb-12 max-w-md font-mono">
+        <p className="text-mm-deep/80 text-lg md:text-xl mb-12 max-w-md font-mono">
           Generate your character with AI.<br />
           Ski the slopes. Collect bananas. Avoid pizza.
         </p>
@@ -55,37 +55,37 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStart, onAudioEnable
         {/* Main Button - Enable Audio first, then Start Game */}
         <button
           onClick={handleButtonClick}
-          className={`group relative px-12 py-5 font-black text-2xl uppercase tracking-widest rounded-lg 
+          className={`group relative px-12 py-5 font-black text-2xl uppercase tracking-widest rounded-xl 
                      transform hover:scale-105 active:scale-95 transition-all duration-200
                      ${audioEnabled 
-                       ? 'bg-n64-yellow text-retro-black shadow-2xl shadow-yellow-500/30 hover:shadow-yellow-500/50 border-b-4 border-yellow-600 hover:border-yellow-500' 
-                       : 'bg-white/20 text-white shadow-2xl shadow-white/10 hover:shadow-white/20 border-b-4 border-white/30 hover:border-white/50 backdrop-blur-sm'
+                       ? 'bg-gradient-to-r from-mm-pink to-mm-magenta text-white shadow-2xl shadow-pink-500/40 hover:shadow-pink-500/60 border-b-4 border-pink-600 hover:border-pink-500' 
+                       : 'bg-white/40 text-mm-deep shadow-2xl shadow-purple-500/20 hover:shadow-purple-500/40 border-b-4 border-mm-purple/50 hover:border-mm-purple backdrop-blur-sm'
                      }`}
         >
           <span className="relative z-10 flex items-center gap-3">
             {!audioEnabled && <span className="text-2xl">🔊</span>}
             {audioEnabled ? 'Start Game' : 'Enable Audio'}
           </span>
-          <div className={`absolute inset-0 bg-gradient-to-t rounded-lg opacity-0 group-hover:opacity-100 transition-opacity
-                          ${audioEnabled ? 'from-yellow-500/20 to-transparent' : 'from-white/10 to-transparent'}`} />
+          <div className={`absolute inset-0 bg-gradient-to-t rounded-xl opacity-0 group-hover:opacity-100 transition-opacity
+                          ${audioEnabled ? 'from-white/20 to-transparent' : 'from-mm-purple/20 to-transparent'}`} />
         </button>
 
         {/* Controls hint */}
-        <div className="mt-12 flex gap-8 text-gray-500 text-sm font-mono">
+        <div className="mt-12 flex gap-8 text-mm-deep/60 text-sm font-mono">
           <div className="flex items-center gap-2">
-            <kbd className="px-2 py-1 bg-gray-800 rounded border border-gray-700 text-gray-400">←</kbd>
-            <kbd className="px-2 py-1 bg-gray-800 rounded border border-gray-700 text-gray-400">→</kbd>
+            <kbd className="px-2 py-1 bg-white/50 rounded border border-mm-purple/30 text-mm-deep">←</kbd>
+            <kbd className="px-2 py-1 bg-white/50 rounded border border-mm-purple/30 text-mm-deep">→</kbd>
             <span>or drag to steer</span>
           </div>
         </div>
       </div>
 
-      {/* Animated snow particles overlay */}
+      {/* Animated sparkle particles overlay */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-2 h-2 bg-white/30 rounded-full animate-pulse"
+            className="absolute w-2 h-2 bg-mm-pink/40 rounded-full animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
