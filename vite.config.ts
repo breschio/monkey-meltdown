@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
-      // Base path for GitHub Pages (repo name)
-      base: mode === 'production' ? '/monkey-meltdown/' : '/',
+      // Base path - root for custom domain, /monkey-meltdown/ for github.io
+      base: '/',
       server: {
         port: 3000,
         host: '0.0.0.0',
