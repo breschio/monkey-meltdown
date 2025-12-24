@@ -10,6 +10,7 @@ type AppMode = 'START' | 'CREATE' | 'GAME';
 const App: React.FC = () => {
   const [mode, setMode] = useState<AppMode>('START');
   const [generatedSprite, setGeneratedSprite] = useState<string | null>(null);
+  const [monkeyName, setMonkeyName] = useState<string>('Unnamed Monkey');
   const [audioEnabled, setAudioEnabled] = useState(() => audioService.isMenuMusicPlaying());
 
   const handleAudioEnabled = () => {
@@ -36,14 +37,12 @@ const App: React.FC = () => {
         <main className="flex-grow w-full flex flex-col items-center justify-center transition-all duration-300 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center mb-8 animate-fade-in">
             <h2 className="text-4xl md:text-6xl font-extrabold text-retro-black mb-6">
-              <span className="text-mm-pink">Create</span> Your Character
+              <span className="text-mm-pink">Make</span> Your Monkey
             </h2>
-            <p className="text-mm-deep/70 max-w-2xl mx-auto text-xl">
-              Describe your character and watch the AI bring it to life
-            </p>
           </div>
           <CharacterGenerator 
             onSpriteGenerated={setGeneratedSprite}
+            onMonkeySelected={setMonkeyName}
             onPlayGame={() => setMode('GAME')}
           />
         </main>
@@ -53,19 +52,22 @@ const App: React.FC = () => {
       {mode === 'GAME' && (
         <main className="flex-grow w-full flex flex-col items-center justify-center transition-all duration-300 w-full h-screen p-2 overflow-hidden">
           <div className="animate-fade-in w-full h-full flex flex-col">
-            <div className="text-center mb-2 flex-shrink-0">
+            <div className="flex items-center justify-between mb-2 flex-shrink-0 px-2">
               <button 
                 onClick={() => setMode('START')}
-                className="font-game text-3xl mb-1 hover:opacity-80 transition-opacity cursor-pointer"
+                className="font-game text-3xl hover:opacity-80 transition-opacity cursor-pointer"
               >
                 <span className="text-mm-pink">MONKEY</span> <span className="text-mm-purple">MELTDOWN</span>
               </button>
-              <p className="text-mm-deep/60 text-xs font-mono">
-                Collect Bananas • Avoid Pizza • Beat the Clock
-              </p>
+              <button
+                onClick={() => setMode('CREATE')}
+                className="px-4 py-2 bg-white/80 hover:bg-white text-mm-deep font-bold rounded-lg border-2 border-mm-purple/30 hover:border-mm-purple transition-all shadow-sm"
+              >
+                Exit
+              </button>
             </div>
             <div className="flex-grow w-full relative">
-              <N64Game generatedSpriteUrl={generatedSprite} />
+              <N64Game generatedSpriteUrl={generatedSprite} monkeyName={monkeyName} />
             </div>
           </div>
         </main>
