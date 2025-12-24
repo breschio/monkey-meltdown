@@ -5,6 +5,30 @@ export class AudioService {
   private isMuted: boolean = false;
   private menuAudio: HTMLAudioElement | null = null;
   private gameAudio: HTMLAudioElement | null = null;
+  
+  // Playlist for menu music rotation
+  private playlist: string[] = [
+    '/audio/playlist/monkrey-meltdown-1.mp3',
+    '/audio/playlist/monkrey-meltdown-2.mp3',
+    '/audio/playlist/pizza-bust.mp3',
+    '/audio/playlist/monkey-on-a-mission.mp3',
+  ];
+  private currentTrackIndex: number = 0;
+  private trackChangeListeners: Set<() => void> = new Set();
+  
+  // Skiing SFX for direction changes
+  private skiingSfx: string[] = [
+    '/audio/sfx/sking/ski1.mp3',
+    '/audio/sfx/sking/ski2.mp3',
+    '/audio/sfx/sking/ski3.mp3',
+    '/audio/sfx/sking/ski14.mp3',
+  ];
+  private lastSkiSfxIndex: number = -1;
+  private sfxVolume: number = 0.5;
+  
+  // Collision SFX
+  private bananaSfx: string = '/audio/sfx/collisions/banana.mp3';
+  private ohNoSfx: string = '/audio/sfx/collisions/oh-no.mp3';
 
   constructor() {
     try {
@@ -49,8 +73,10 @@ export class AudioService {
   }
 
   playCollect() {
-    this.playTone(880, 'sine', 0.1, 0.3);
-    setTimeout(() => this.playTone(1760, 'sine', 0.2, 0.3), 50);
+    // Play banana collection sound
+    const audio = new Audio(this.bananaSfx);
+    audio.volume = this.sfxVolume;
+    audio.play().catch(() => {});
   }
 
   playPenalty() {
@@ -59,8 +85,10 @@ export class AudioService {
   }
 
   playCrash() {
-    this.playTone(100, 'sawtooth', 0.1, 0.8);
-    setTimeout(() => this.playTone(50, 'sawtooth', 0.2, 0.6), 50);
+    // Play "oh no" sound when hitting rocks/trees
+    const audio = new Audio(this.ohNoSfx);
+    audio.volume = this.sfxVolume;
+    audio.play().catch(() => {});
   }
 
   playPowerUp() {
@@ -68,6 +96,29 @@ export class AudioService {
     [440, 554, 659, 880].forEach((freq, i) => {
       setTimeout(() => this.playTone(freq, 'square', 0.2, 0.4), i * 100);
     });
+  }
+
+  // Play a random skiing sound effect (for direction changes)
+  playSkiingSound() {
+    if (this.skiingSfx.length === 0) return;
+    
+    // Pick a random sound, but avoid repeating the last one for variety
+    let randomIndex: number;
+    do {
+      randomIndex = Math.floor(Math.random() * this.skiingSfx.length);
+    } while (randomIndex === this.lastSkiSfxIndex && this.skiingSfx.length > 1);
+    
+    this.lastSkiSfxIndex = randomIndex;
+    
+    const audio = new Audio(this.skiingSfx[randomIndex]);
+    audio.volume = this.sfxVolume;
+    audio.play().catch(() => {
+      // Autoplay may be blocked
+    });
+  }
+
+  setSfxVolume(volume: number) {
+    this.sfxVolume = Math.max(0, Math.min(1, volume));
   }
 
   startMusic() {
@@ -119,20 +170,94 @@ export class AudioService {
     return this.menuAudio !== null && !this.menuAudio.paused;
   }
 
-  // Menu music (MP3 file)
+  // Get current track info
+  getCurrentTrackIndex(): number {
+    return this.currentTrackIndex;
+  }
+
+  getTotalTracks(): number {
+    return this.playlist.length;
+  }
+
+  getCurrentTrackName(): string {
+    const path = this.playlist[this.currentTrackIndex];
+    const filename = path.split('/').pop() || '';
+    // Clean up the filename for display
+    return filename
+      .replace('.mp3', '')
+      .replace(/-/g, ' ')
+      .replace(/(\d)$/, ' $1');
+  }
+
+  // Subscribe to track changes
+  onTrackChange(callback: () => void): () => void {
+    this.trackChangeListeners.add(callback);
+    return () => this.trackChangeListeners.delete(callback);
+  }
+
+  private notifyTrackChange() {
+    this.trackChangeListeners.forEach(cb => cb());
+  }
+
+  // Menu music (MP3 file) with playlist rotation
   startMenuMusic() {
+    // On first play of session, pick a random starting track
+    if (!this.menuAudio) {
+      this.currentTrackIndex = Math.floor(Math.random() * this.playlist.length);
+    }
+    // Always load through loadTrack to ensure rotation is set up
+    this.loadTrack(this.currentTrackIndex, true);
+  }
+
+  private loadTrack(index: number, forcePlay: boolean = false) {
+    const wasPlaying = forcePlay || (this.menuAudio ? !this.menuAudio.paused : true);
+    const volume = this.menuAudio?.volume ?? 0.4;
+    
+    // Clean up previous audio element completely
     if (this.menuAudio) {
-      this.menuAudio.currentTime = 0;
-      this.menuAudio.play().catch(() => {});
-      return;
+      this.menuAudio.pause();
+      this.menuAudio.removeEventListener('ended', this.handleTrackEnded);
+      this.menuAudio.src = '';
+      this.menuAudio.load();
     }
 
-    this.menuAudio = new Audio('/audio/menu-music.mp3');
-    this.menuAudio.loop = true;
-    this.menuAudio.volume = 0.4;
-    this.menuAudio.play().catch(() => {
-      // Autoplay blocked - will play on user interaction
-    });
+    this.currentTrackIndex = ((index % this.playlist.length) + this.playlist.length) % this.playlist.length;
+    this.menuAudio = new Audio(this.playlist[this.currentTrackIndex]);
+    this.menuAudio.volume = volume;
+    
+    // Bind the handler so we can remove it later
+    this.handleTrackEnded = () => {
+      this.nextTrack();
+    };
+    
+    // When track ends, play next track (continuous rotation)
+    this.menuAudio.addEventListener('ended', this.handleTrackEnded);
+
+    if (wasPlaying) {
+      this.menuAudio.play().catch(() => {
+        // Autoplay blocked - will play on user interaction
+      });
+    }
+    
+    this.notifyTrackChange();
+  }
+  
+  private handleTrackEnded: () => void = () => {};
+
+  nextTrack() {
+    const nextIndex = (this.currentTrackIndex + 1) % this.playlist.length;
+    this.loadTrack(nextIndex);
+  }
+
+  previousTrack() {
+    // If we're more than 3 seconds into the song, restart it
+    if (this.menuAudio && this.menuAudio.currentTime > 3) {
+      this.menuAudio.currentTime = 0;
+      this.notifyTrackChange();
+      return;
+    }
+    const prevIndex = (this.currentTrackIndex - 1 + this.playlist.length) % this.playlist.length;
+    this.loadTrack(prevIndex);
   }
 
   stopMenuMusic() {
