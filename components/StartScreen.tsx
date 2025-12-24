@@ -29,15 +29,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStart, onAudioEnable
       <div className="absolute inset-0 bg-gradient-to-b from-mm-light/90 via-mm-lavender/80 to-mm-purple/70 pointer-events-none" />
       
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center text-center px-4">
-        {/* Decorative top element */}
-        <div className="flex gap-2 mb-6 animate-bounce">
-          <span className="w-4 h-4 bg-mm-pink rounded-full shadow-lg shadow-pink-500/50"></span>
-          <span className="w-4 h-4 bg-mm-purple rounded-full shadow-lg shadow-purple-500/50"></span>
-          <span className="w-4 h-4 bg-mm-magenta rounded-full shadow-lg shadow-fuchsia-500/50"></span>
-          <span className="w-4 h-4 bg-mm-mint rounded-full shadow-lg shadow-emerald-500/50"></span>
-        </div>
-
+      <div className="relative z-10 flex flex-col items-center text-center px-4 w-fit">
         {/* Main Title */}
         <h1 className="font-game text-6xl md:text-8xl text-mm-pink mb-2 drop-shadow-2xl" style={{ textShadow: '3px 3px 0 #7c3aed, -1px -1px 0 #7c3aed' }}>
           MONKEY
@@ -48,7 +40,6 @@ export const StartScreen: React.FC<StartScreenProps> = ({ onStart, onAudioEnable
 
         {/* Subtitle */}
         <p className="text-mm-deep/80 text-lg md:text-xl mb-12 max-w-md font-mono">
-          Generate your character with AI.<br />
           Ski the slopes. Collect bananas. Avoid pizza.
         </p>
 
