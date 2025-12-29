@@ -807,14 +807,22 @@ export const N64Game: React.FC<N64GameProps> = ({ generatedSpriteUrl, monkeyName
     scene.add(playerGroup);
     playerRef.current = playerGroup;
 
+    // Initial player setup
+    const initialMesh = generatedSpriteUrl ? createSpritePlayer(generatedSpriteUrl) : createMonkey();
+    playerGroup.add(initialMesh);
+
     // Resize Observer
     const resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
-            if (entry.target === mountRef.current && cameraRef.current && rendererRef.current) {
+            if (entry.target === mountRef.current) {
                 const { width, height } = entry.contentRect;
-                cameraRef.current.aspect = width / height;
-                cameraRef.current.updateProjectionMatrix();
-                rendererRef.current.setSize(width, height);
+                if (width === 0 || height === 0) return;
+                
+                if (cameraRef.current && rendererRef.current) {
+                    cameraRef.current.aspect = width / height;
+                    cameraRef.current.updateProjectionMatrix();
+                    rendererRef.current.setSize(width, height);
+                }
             }
         }
     });
@@ -823,7 +831,10 @@ export const N64Game: React.FC<N64GameProps> = ({ generatedSpriteUrl, monkeyName
 
     // Animation Loop
     const animate = () => {
-        if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
+        if (!rendererRef.current || !sceneRef.current || !cameraRef.current) {
+            reqRef.current = requestAnimationFrame(animate);
+            return;
+        }
 
         const player = playerRef.current;
         const currentGameState = gameStateRef.current;
@@ -1098,10 +1109,38 @@ export const N64Game: React.FC<N64GameProps> = ({ generatedSpriteUrl, monkeyName
 
     return () => {
         if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
+        if (reqRef.current) cancelAnimationFrame(reqRef.current);
+
         if (mountRef.current && rendererRef.current) {
             mountRef.current.removeChild(rendererRef.current.domElement);
         }
-        if (reqRef.current) cancelAnimationFrame(reqRef.current);
+
+        // Clean up Three.js resources
+        if (rendererRef.current) {
+            rendererRef.current.dispose();
+            rendererRef.current.forceContextLoss();
+        }
+
+        if (sceneRef.current) {
+            sceneRef.current.traverse((object) => {
+                if (object instanceof THREE.Mesh || object instanceof THREE.Sprite || object instanceof THREE.Points) {
+                    if (object.geometry) object.geometry.dispose();
+                    if (object.material) {
+                        if (Array.isArray(object.material)) {
+                            object.material.forEach(material => material.dispose());
+                        } else {
+                            object.material.dispose();
+                        }
+                    }
+                }
+            });
+            sceneRef.current.clear();
+        }
+        
+        // Reset refs
+        sceneRef.current = null;
+        cameraRef.current = null;
+        rendererRef.current = null;
     };
   }, []);
 

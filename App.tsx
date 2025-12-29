@@ -25,7 +25,7 @@ const App: React.FC = () => {
         <div className="fixed inset-0 z-20">
           {/* Background demo game */}
           <div className="absolute inset-0">
-            <N64Game isDemo={true} />
+            <N64Game key="demo" isDemo={true} />
           </div>
           {/* Start screen overlay */}
           <StartScreen onStart={() => setMode('CREATE')} onAudioEnabled={handleAudioEnabled} />
@@ -67,7 +67,11 @@ const App: React.FC = () => {
               </button>
             </div>
             <div className="flex-grow w-full relative">
-              <N64Game generatedSpriteUrl={generatedSprite} monkeyName={monkeyName} />
+              <N64Game 
+                key={generatedSprite || 'game'} 
+                generatedSpriteUrl={generatedSprite} 
+                monkeyName={monkeyName} 
+              />
             </div>
           </div>
         </main>
